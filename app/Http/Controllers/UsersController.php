@@ -40,7 +40,32 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $res = [
+            'data' => [],
+            'message' => 'User Created',
+            'success' => true
+        ];
+        try {
+            $userData = $request->except('id');
+            $userData['password'] =  $userData['password'] ?? 'dededede';
+            $userData['password'] =\Hash::make($userData['password'] );
+            $user = new User();
+            /*  $user->name = $request->input('name');
+              $user->phone = $request->input('phone');
+            */
+            $user->fill($userData);
+            $user->save();
+            $res['data'] = $user;
+
+
+        } catch (\Exception $e ){
+            $res = [
+                'data' => [],
+                'message' => $e->getMessage(),
+                'success' => false
+            ];
+        }
+        return $res;
     }
 
     /**
