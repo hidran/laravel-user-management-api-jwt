@@ -12,8 +12,18 @@ class UsersController extends Controller
      */
     public function index()
     {
-        return User::all();
+        $res = [
+            'data' =>[],
+            'message' => ''
+        ];
+        try{
+            $res['data'] = User::all();
+        } catch (\Exception $e){
+            $res['message'] = $e->getMessage();
+        }
+        return $res;
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -36,7 +46,16 @@ class UsersController extends Controller
      */
     public function show(User $user)
     {
-        //
+        $res = [
+            'data' =>[],
+            'message' => ''
+        ];
+        try{
+            $res['data'] = User::findOrFail($user);
+        } catch (\Exception $e){
+            $res['message'] = $e->getMessage();
+        }
+        return $res;
     }
 
     /**
