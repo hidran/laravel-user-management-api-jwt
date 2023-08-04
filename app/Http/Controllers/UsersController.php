@@ -58,7 +58,7 @@ class UsersController extends Controller
             $res['data'] = $user;
 
 
-        } catch (\Exception $e ){
+        } catch (Exception $e ){
             $res = [
                 'data' => [],
                 'message' => $e->getMessage(),
@@ -124,6 +124,20 @@ class UsersController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $res = [
+            'data' => $user,
+            'message' => 'User ' . $user->id . ' deleted',
+            'success' => true
+        ];
+        try{
+            $res['success'] = $user->delete();
+            if(!$res['success']){
+                $res['message'] ='Could not delete $user '+ $user->id;
+            }
+        }catch (Exception $e){
+            $res['success'] = false;
+            $res['message'] = $e->getMessage();
+        }
+        return $res;
     }
 }
