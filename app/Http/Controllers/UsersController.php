@@ -15,12 +15,12 @@ class UsersController extends Controller
     public function index()
     {
         $res = [
-            'data' =>[],
+            'data' => [],
             'message' => ''
         ];
-        try{
+        try {
             $res['data'] = User::all();
-        } catch (Exception $e){
+        } catch (Exception $e) {
             $res['message'] = $e->getMessage();
         }
         return $res;
@@ -37,8 +37,10 @@ class UsersController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * @param Request $request
+     * @return array
      */
-    public function store(Request $request)
+    public function store(Request $request): array
     {
         $res = [
             'data' => [],
@@ -47,8 +49,8 @@ class UsersController extends Controller
         ];
         try {
             $userData = $request->except('id');
-            $userData['password'] =  $userData['password'] ?? 'dededede';
-            $userData['password'] =\Hash::make($userData['password'] );
+            $userData['password'] = $userData['password'] ?? 'dededede';
+            $userData['password'] = \Hash::make($userData['password']);
             $user = new User();
             /*  $user->name = $request->input('name');
               $user->phone = $request->input('phone');
@@ -56,9 +58,7 @@ class UsersController extends Controller
             $user->fill($userData);
             $user->save();
             $res['data'] = $user;
-
-
-        } catch (Exception $e ){
+        } catch (Exception $e) {
             $res = [
                 'data' => [],
                 'message' => $e->getMessage(),
@@ -71,15 +71,15 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(int $user)
     {
         $res = [
-            'data' =>[],
+            'data' => [],
             'message' => ''
         ];
-        try{
+        try {
             $res['data'] = User::findOrFail($user);
-        } catch (Exception $e){
+        } catch (Exception $e) {
             $res['message'] = $e->getMessage();
         }
         return $res;
@@ -99,6 +99,7 @@ class UsersController extends Controller
     public function update(Request $request, User $user): array
     {
         $data = $request->except(['id']);
+
         $res = [
             'data' => null,
             'message' => '',
@@ -107,10 +108,10 @@ class UsersController extends Controller
 
         try {
             $data['password'] = 'dededede';
-            $User = User::findOrFail($user);
+
             $data['password'] = Hash::make($data['password']);
-            $User->update($data);
-            $res['data'] = $User;
+            $user->update($data);
+            $res['data'] = $user;
             $res['message'] = 'User updated!';
         } catch (Exception $e) {
             $res['success'] = false;
@@ -122,19 +123,19 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(User $user): array
     {
         $res = [
             'data' => $user,
             'message' => 'User ' . $user->id . ' deleted',
             'success' => true
         ];
-        try{
+        try {
             $res['success'] = $user->delete();
-            if(!$res['success']){
-                $res['message'] ='Could not delete $user '+ $user->id;
+            if (!$res['success']) {
+                $res['message'] = 'Could not delete $user ' + $user->id;
             }
-        }catch (Exception $e){
+        } catch (Exception $e) {
             $res['success'] = false;
             $res['message'] = $e->getMessage();
         }
