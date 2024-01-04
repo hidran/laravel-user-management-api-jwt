@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:api')->except(['create']);
+    }
+
     /**
      * Display a listing of the resource.
      */
